@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #77c6ff 3px solid;
+        }
+        header h1 {
+            text-align: center;
+            text-transform: uppercase;
+            margin: 0;
+            font-size: 24px;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-list li {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: #ddd 1px solid;
+        }
+        .task-list button {
+            float: right;
+            background: #ff6666;
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .task-list button:hover {
+            background: #ff3333;
+        }
+        form {
+            margin-top: 20px;
+            background: #fff;
+            padding: 20px;
+            border: #ddd 1px solid;
+        }
+        form input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: #ddd 1px solid;
+        }
+        form input[type="submit"] {
+            width: 18%;
+            padding: 10px;
+            background: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        form input[type="submit"]:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Task Management</h1>
+    </header>
+    <div class="container">
+        <ul class="task-list">
+            {% for task in tasks %}
+            <li>{{ task }}
+                <form style="display: inline;" action="/delete/{{ loop.index0 }}" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        <form action="/add" method="POST">
+            <input type="text" name="task" placeholder="Enter new task" required>
+            <input type="submit" value="Add Task">
+        </form>
+    </div>
+</body>
+</html>
