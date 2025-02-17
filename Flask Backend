@@ -10,6 +10,8 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     status = db.Column(db.String(50), default='To-Do')
+    priority = db.Column(db.String(50), default='Normal')
+    due_date = db.Column(db.String(50), nullable=True)
 
 @app.route('/')
 def index():
@@ -19,8 +21,10 @@ def index():
 @app.route('/add', methods=['POST'])
 def add_task():
     title = request.form.get('title')
+    priority = request.form.get('priority', 'Normal')
+    due_date = request.form.get('due_date')
     if title:
-        new_task = Task(title=title)
+        new_task = Task(title=title, priority=priority, due_date=due_date)
         db.session.add(new_task)
         db.session.commit()
         flash('Task added successfully!', 'success')
@@ -31,6 +35,8 @@ def update_task(task_id):
     task = Task.query.get(task_id)
     if task:
         task.status = request.form.get('status')
+        task.priority = request.form.get('priority', task.priority)
+        task.due_date = request.form.get('due_date', task.due_date)
         db.session.commit()
         flash('Task updated!', 'info')
     return redirect(url_for('index'))
