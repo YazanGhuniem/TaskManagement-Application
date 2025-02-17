@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <!-- Bootstrap CSS for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h2 class="text-center">Task Manager</h2>
+
+        <!-- Form to Add a Task -->
+        <form action="{{ url_for('add_task') }}" method="POST" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="title" class="form-control" placeholder="Enter a new task" required>
+                <button type="submit" class="btn btn-primary">Add Task</button>
+            </div>
+        </form>
+
+        <!-- Task List Table -->
+        <table class="table table-bordered bg-white">
+            <thead class="table-dark">
+                <tr>
+                    <th>Task</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>
+                        <form action="{{ url_for('update_task', task_id=task.id) }}" method="POST">
+                            <select name="status" class="form-select" onchange="this.form.submit()">
+                                <option value="To-Do" {% if task.status == 'To-Do' %} selected {% endif %}>To-Do</option>
+                                <option value="In Progress" {% if task.status == 'In Progress' %} selected {% endif %}>In Progress</option>
+                                <option value="Done" {% if task.status == 'Done' %} selected {% endif %}>Done</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('delete_task', task_id=task.id) }}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS (optional for dropdowns, etc.) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
