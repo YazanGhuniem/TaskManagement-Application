@@ -51,13 +51,7 @@ def delete_task(task_id):
 
 if __name__ == '__main__':
     with app.app_context():
-        os.makedirs("instance", exist_ok=True)
-
-        db_path = "instance/tasks.db"
-        if os.path.exists(db_path):
-            os.remove(db_path)
-
-        db.create_all()
-        print("✅ Database recreated successfully!")
+        db.create_all()  
+        print("✅ Database tables checked and created if missing!")
 
     app.run(host='0.0.0.0', port=10000, debug=True)
