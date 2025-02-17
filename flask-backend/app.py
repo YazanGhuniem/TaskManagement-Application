@@ -2,7 +2,12 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/tasks.db'
+import os
+
+DATABASE_URL = os.getenv('DATABASE_URL')  
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)  
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SECRET_KEY'] = 'your_secret_key'
 db = SQLAlchemy(app)
 
@@ -43,7 +48,6 @@ def delete_task(task_id):
         db.session.commit()
         flash('Task deleted!', 'danger')
     return redirect(url_for('index'))
-import os
 
 if __name__ == '__main__':
     with app.app_context():
